@@ -114,10 +114,14 @@ patch_hollight() {
     hol2dk patch
 }
 
+gen_hollight_file() {
+    awk '/^loadt "Logic\/unif.ml"/{print;RM=1;next}/^loadt /{if(RM)next}{print}' Logic/make.ml > $hollight_file
+}
+
 dump_proofs() {
     start dump hol-light proofs
     cd hol-light
-    cp ../../$base.ml $hollight_file
+    gen_hollight_file
     hol2dk dump-simp$dump_simp_option $hollight_file
     cd ..
 }
